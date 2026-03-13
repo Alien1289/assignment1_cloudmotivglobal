@@ -72,8 +72,11 @@ const nodeCategories: NodeCategories = {
 // CUSTOM NODE COMPONENT
 // ============================================
 
-function CustomNode({ data }: NodeProps<NodeData>) {
+function CustomNode(props: NodeProps<NodeData>) {
+  const { data } = props;
+
   const categoryColor = nodeCategories[data.category]?.color || "#64748b";
+
   const notePreview =
     data.note && data.note.length > 60
       ? data.note.substring(0, 60) + "..."
@@ -371,22 +374,16 @@ export default function Home() {
   );
 
   const onConnect = useCallback((params: Connection) => {
+    if (!params.source || !params.target) return;
+
     const newEdge: CustomEdge = {
       ...params,
       id: `${params.source}-${params.target}`,
       animated: true,
       style: { stroke: "#10b981", strokeWidth: 2 },
     };
+
     setEdges((eds) => addEdge(newEdge, eds));
-    setTimeout(() => {
-      setEdges((eds) =>
-        eds.map((edge) =>
-          edge.id === newEdge.id
-            ? { ...edge, animated: false, style: undefined }
-            : edge,
-        ),
-      );
-    }, 2000);
   }, []);
 
   const onNodeClick = useCallback(
@@ -665,7 +662,8 @@ export default function Home() {
             className={styles.minimap}
             maskColor="rgba(15, 23, 42, 0.8)"
             nodeColor={(node) => {
-              const category = node.data?.category || "library";
+              const category = (node.data?.category ||
+                "library") as CategoryKey;
               return nodeCategories[category]?.color || "#64748b";
             }}
           />
