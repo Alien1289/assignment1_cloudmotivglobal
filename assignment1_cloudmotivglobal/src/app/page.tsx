@@ -72,8 +72,7 @@ const nodeCategories: NodeCategories = {
 // CUSTOM NODE COMPONENT
 // ============================================
 
-function CustomNode(props: NodeProps<NodeData>) {
-  const { data } = props;
+function CustomNode({ data }: { data: NodeData }) {
 
   const categoryColor = nodeCategories[data.category]?.color || "#64748b";
 
