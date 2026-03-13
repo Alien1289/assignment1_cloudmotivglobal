@@ -414,7 +414,7 @@ export default function Home() {
           : 0;
       const newId = String(maxId + 1);
 
-      const newNode: CustomNode = {
+      const newNode: GraphNode = {
         id: newId,
         type: "custom",
         position: {
