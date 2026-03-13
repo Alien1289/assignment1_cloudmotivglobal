@@ -47,7 +47,7 @@ interface NodeCategories {
 
 type CategoryKey = keyof NodeCategories;
 
-interface NodeData {
+interface NodeData extends Record<string, unknown> {
   label: string;
   note: string;
   category: CategoryKey;
