@@ -73,7 +73,6 @@ const nodeCategories: NodeCategories = {
 // ============================================
 
 function CustomNode({ data }: { data: NodeData }) {
-
   const categoryColor = nodeCategories[data.category]?.color || "#64748b";
 
   const notePreview =
@@ -395,7 +394,7 @@ export default function Home() {
     [getConnectedNodes],
   );
 
-  const onInit: OnInit = useCallback((reactFlowInstance) => {
+  const onInit = useCallback((reactFlowInstance: any) => {
     reactFlowInstance.fitView({ duration: 0, padding: 0.2 });
     setIsReady(true);
   }, []);
