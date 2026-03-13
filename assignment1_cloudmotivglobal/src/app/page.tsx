@@ -53,8 +53,8 @@ interface NodeData extends Record<string, unknown> {
   category: CategoryKey;
 }
 
-type CustomNode = Node<NodeData>;
-type CustomEdge = Edge;
+type GraphNode = Node<NodeData>;
+type GraphEdge = Edge;
 
 // ============================================
 // CONSTANTS
@@ -189,7 +189,7 @@ const nodeTypes = {
 // INITIAL DATA
 // ============================================
 
-const initialNodes: CustomNode[] = [
+const initialNodes: GraphNode[] = [
   {
     id: "1",
     type: "custom",
@@ -272,7 +272,7 @@ const initialNodes: CustomNode[] = [
   },
 ];
 
-const initialEdges: CustomEdge[] = [
+const initialEdges: GraphEdge[] = [
   { id: "e2-1", source: "2", target: "1", label: "built on", animated: false },
   {
     id: "e1-3",
@@ -301,12 +301,12 @@ const initialEdges: CustomEdge[] = [
 // ============================================
 
 export default function Home() {
-  const [nodes, setNodes] = useState<CustomNode[]>(() => {
+  const [nodes, setNodes] = useState<GraphNode[]>(() => {
     if (typeof window === "undefined") return initialNodes;
     const saved = localStorage.getItem("knowledgeGraphData");
     if (saved) {
       const parsed = JSON.parse(saved);
-      return parsed.nodes.map((node: CustomNode) => ({
+      return parsed.nodes.map((node: GraphNode) => ({
         ...node,
         type: node.type || "custom",
       }));
@@ -314,13 +314,13 @@ export default function Home() {
     return initialNodes;
   });
 
-  const [edges, setEdges] = useState<CustomEdge[]>(() => {
+  const [edges, setEdges] = useState<GraphEdge[]>(() => {
     if (typeof window === "undefined") return initialEdges;
     const saved = localStorage.getItem("knowledgeGraphData");
     return saved ? JSON.parse(saved).edges : initialEdges;
   });
 
-  const [selectedNode, setSelectedNode] = useState<CustomNode | null>(null);
+  const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null);
   const [isReady, setIsReady] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isAddingNode, setIsAddingNode] = useState<boolean>(false);
@@ -363,7 +363,7 @@ export default function Home() {
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) =>
-      setNodes((nds) => applyNodeChanges(changes, nds) as CustomNode[]),
+      setNodes((nds) => applyNodeChanges(changes, nds) as GraphNode[]),
     [],
   );
 
@@ -376,7 +376,7 @@ export default function Home() {
   const onConnect = useCallback((params: Connection) => {
     if (!params.source || !params.target) return;
 
-    const newEdge: CustomEdge = {
+    const newEdge: GraphEdge = {
       ...params,
       id: `${params.source}-${params.target}`,
       animated: true,
@@ -387,7 +387,7 @@ export default function Home() {
   }, []);
 
   const onNodeClick = useCallback(
-    (_event: React.MouseEvent, node: CustomNode) => {
+    (_event: React.MouseEvent, node: GraphNode) => {
       setIsEditing(false);
       setSelectedNode(node);
       const connected = getConnectedNodes(node.id);
